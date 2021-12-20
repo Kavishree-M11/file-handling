@@ -1,0 +1,140 @@
+#include <stdio.h>
+
+struct Employee
+{
+    char name[30], Com[30];
+    int Id, salary;
+} m, rp[30];
+
+void read_Employee()
+{
+    FILE *read = fopen("Hello.txt", "r+");
+    int count = 0;
+    char c = getc(read);
+    while (c!= EOF)
+    {
+        if (c == '\n')
+            count++;
+        c = getc(read);
+    }
+    rewind(read);
+    int find = 0, id;
+    printf("ENTER EMPLOYEE ID: ");
+    scanf("%d", &id);
+    int i = 0;
+    for (; i < count; i++)
+    {
+        fscanf(read, "%s %d %d %s", rp[i].name, &rp[i].salary, &rp[i].Id, rp[i].Com);
+        if (rp[i].Id == id)
+        {
+            find = i;
+            break;
+        }
+    }
+    if (i == count)
+        printf("EMPLOYEE DOESN'T EXIST");
+    else
+        printf("NAME : %s\nEMPLOYEE ID : %d\nSALARY : %d\nCOMPANY NAME : %s\n", rp[find].name, rp[find].Id, rp[find].salary, rp[find].Com);
+    fclose(read);
+}
+
+void display_Employee()
+{
+    FILE *dataread = fopen("Hello.txt", "r");
+    int count = 0;
+    char c = getc(dataread);
+    while (c != EOF)
+    {
+        if (c == '\n')
+            count++;
+        c = getc(dataread);
+    }
+    rewind(dataread);
+    int temp = count;
+    printf("\nSR. NO.\tID\t\tNAME\t\tSALARY\t\t\tCOMPANY\n");
+    while (count--)
+    {
+        fscanf(dataread, "%s%d%d%s", m.name, &m.salary, &m.Id, m.Com);
+        printf("%d.\t%d\t%s\t%d\t%s\n", temp-count, m.Id, m.name, m.salary, m.Com);
+    }
+    fclose(dataread);
+}
+
+void delete_data()
+{
+    FILE *dataread = fopen("Hello.txt", "r");
+    int count = 0;
+    char c = getc(dataread);
+    while (c != EOF)
+    {
+        if (c == '\n')
+            count++;
+        c = getc(dataread);
+    }
+    rewind(dataread);
+    int id;
+    printf("ENTER ID TO DELETE : ");
+    scanf("%d", &id);
+    int i = 0;
+    for (; i < count; i++)
+    {
+        fscanf(dataread, "%s %d %d %s", rp[i].name, &rp[i].salary, &rp[i].Id, rp[i].Com);
+    }
+    FILE *del = fopen("Hello.txt", "w");
+    for (int i = 0; i < count; i++)
+    {
+        if (rp[i].Id == id)
+            continue;
+        fprintf(del, "%d %s %d %s",rp[i].Id, rp[i].name, rp[i].salary,  rp[i].Com);
+        fputc('\n', del);
+    }
+    fclose(dataread);
+    fclose(del);
+}
+
+void write_data()
+{
+    FILE *datawrite = fopen("Hello.txt", "a");
+    printf("EMPLOYEE NAME : ");
+    scanf("%s", m.name);
+    printf("EMPLOYEE SALARY: ");
+    scanf("%d", &m.salary);
+    printf("EMPLOYEE ID : ");
+    scanf("%d", &m.Id);
+    printf("COMPANY : ");
+    scanf("%s", m.Com);
+    fprintf(datawrite, "%d %s %d %s",  m.Id,m.name, m.salary,m.Com);
+    fputc('\n', datawrite);
+    fclose(datawrite);
+}
+
+int main()
+{
+    while (1)
+    {
+        int choice;
+        printf("\n\n\tCHOOSE ONE : \n1. READ EMPLOYEE DATA\n2. ADD DATA\n3. DELETE EMPLOYEE DATA\n4. DISPLAY ALL EMPLOYEES DATA\n5. EXIT\n");
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 1:
+            read_Employee();
+            break;
+        case 2:
+            write_data();
+            break;
+        case 3:
+            delete_data();
+            break;
+        case 4:
+            display_Employee();
+            break;
+        case 5:
+            return 1;
+            break;
+        default:
+            printf("INVALID OPTION");
+        }
+    }
+
+    return 0;}
